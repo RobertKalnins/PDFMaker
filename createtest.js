@@ -27,15 +27,15 @@ resumeDoc.pipe(fs.createWriteStream('resume.pdf'));
 resumeDoc.font('Helvetica');
 
 // Header with name and contact info
-resumeDoc.fontSize(20).text('Your Name', { align: 'center' });
-resumeDoc.fontSize(12).text('Address | Email | Phone', { align: 'center' });
+resumeDoc.fontSize(18).font('Helvetica-Bold').text('Your Name', { align: 'center' });
+resumeDoc.fontSize(11).font('Helvetica').text('Address | Email | Phone', { align: 'center' });
 resumeDoc.moveDown(2);
 
 // Function to add a section header with a colored vector line
 const addSectionHeader = (doc, title) => {
-    doc.fontSize(14).font('Helvetica-Bold').text(title);
+    doc.fontSize(13).font('Helvetica-Bold').text(title);
     doc.strokeColor('#800020') // Burgundy color hex code
-       .lineWidth(2)           // Slightly thicker line for visibility
+       .lineWidth(1)           // Slightly thicker line for visibility
        .moveTo(50, doc.y + 5)  // Start the line slightly below the text
        .lineTo(550, doc.y + 5) // End line position
        .stroke();
