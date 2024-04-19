@@ -59,13 +59,21 @@ coverDoc.pipe(fs.createWriteStream('coverletter.pdf'));
 // Read content from cover letter file
 const coverLetter = readFileContents('coverletter.txt').split('\n');
 
-// Add content to the Cover Letter PDF
-coverDoc.fontSize(16).text('Cover Letter', { underline: true });
-coverDoc.fontSize(12);
+// Setup fonts and sizes for the cover letter
+coverDoc.fontSize(16).font('Helvetica-Bold').text('Cover Letter', { underline: true });
+coverDoc.moveDown(0.5);
+coverDoc.fontSize(12).font('Helvetica');
+
+// Print each line with appropriate spacing
 coverLetter.forEach(line => {
     coverDoc.text(line.trim(), { align: 'left' });
     coverDoc.moveDown(0.5);
 });
+
+// Enhance the closing signature
+coverDoc.moveDown(1);
+coverDoc.fontSize(12).font('Helvetica-Bold').text('John Doe', { align: 'left' });
+coverDoc.fontSize(12).font('Helvetica').text('john.doe@example.com', { align: 'left' });
 
 // Finalize Cover Letter PDF
 coverDoc.end();
