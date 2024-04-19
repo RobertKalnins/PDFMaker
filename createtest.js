@@ -6,65 +6,60 @@ function readFileContents(path) {
     return fs.readFileSync(path, 'utf8');
 }
 
-// Function to add multi-line text
-function addMultilineText(doc, textArray) {
+// Function to add multi-line text with optional bullet points
+function addMultilineText(doc, textArray, bullet = false) {
     textArray.forEach(line => {
-        doc.text(line.trim(), { align: 'justify' });
+        line = line.trim(); // Trim each line to avoid unwanted whitespace
+        if (bullet && line !== '') { // Only add bullet points to non-empty lines
+            line = `• ${line}`;
+        }
+        doc.text(line, { align: 'left' });
         doc.moveDown(0.5);
     });
     doc.moveDown(1); // Extra space after each section
 }
 
 // Create Resume PDF
-const resumeDoc = new PDFDocument();
+const resumeDoc = new PDFDocument({ margin: 50 });
 resumeDoc.pipe(fs.createWriteStream('resume.pdf'));
 
-// Read content from files for resume
-const professionalSummary = readFileContents('ProfessionalSummary.txt').split('\n');
-const experience = readFileContents('Experience.txt').split('\n');
-const education = readFileContents('Education.txt').split('\n');
-const skills = readFileContents('Skills.txt').split('\n');  // Assuming each skill is on a new line
+// Set a uniform font for the entire document
+resumeDoc.font('Helvetica');
 
-// Add content to the Resume PDF
+// Add Header
 resumeDoc.fontSize(20).text('Your Name', { align: 'center' });
 resumeDoc.fontSize(12).text('Address | Email | Phone', { align: 'center' });
-resumeDoc.moveDown(1);
+resumeDoc.moveDown(2);
 
-resumeDoc.fontSize(14).text('Professional Summary', { underline: true });
-resumeDoc.fontSize(10);
-addMultilineText(resumeDoc, professionalSummary);
+// Section headers and content
+const sections = {
+    'Professional Summary': readFileContents('ProfessionalSummary.txt').split('\n'),
+    'Experience': readFileContents('Experience.txt').split('\n'),
+    'Education': readFileContents('Education.txt').split('\n'),
+    'Skills': readFileContents('Skills.txt').split('\n')
+};
 
-resumeDoc.fontSize(14).text('Experience', { underline: true });
-resumeDoc.fontSize(10);
-addMultilineText(resumeDoc, experience);
-
-resumeDoc.fontSize(14).text('Education', { underline: true });
-resumeDoc.fontSize(10);
-addMultilineText(resumeDoc, education);
-
-resumeDoc.fontSize(14).text('Skills', { underline: true });
-resumeDoc.fontSize(10);
-skills.forEach(skill => {
-    resumeDoc.text(skill.trim(), { align: 'left' });
-    resumeDoc.moveDown(0.2);
+Object.keys(sections).forEach(section => {
+    resumeDoc.fontSize(14).font('Helvetica-Bold').text(section, { underline: true });
+    resumeDoc.fontSize(10).font('Helvetica');
+    addMultilineText(resumeDoc, sections[section], section === 'Skills' || section === 'Experience');
 });
 
 // Finalize Resume PDF
 resumeDoc.end();
 
 // Create Cover Letter PDF
-const coverDoc = new PDFDocument();
+const coverDoc = new PDFDocument({ margin: 50 });
 coverDoc.pipe(fs.createWriteStream('coverletter.pdf'));
 
-// Read content from cover letter file
-const coverLetter = readFileContents('coverletter.txt').split('\n');
-
 // Setup fonts and sizes for the cover letter
+coverDoc.font('Helvetica');
 coverDoc.fontSize(16).font('Helvetica-Bold').text('Cover Letter', { underline: true });
 coverDoc.moveDown(0.5);
 coverDoc.fontSize(12).font('Helvetica');
 
-// Print each line with appropriate spacing
+// Read content from the cover letter file
+const coverLetter = readFileContents('coverletter.txt').split('\n');
 coverLetter.forEach(line => {
     coverDoc.text(line.trim(), { align: 'left' });
     coverDoc.moveDown(0.5);
