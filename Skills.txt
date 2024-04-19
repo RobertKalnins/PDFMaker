@@ -1,0 +1,8 @@
+JavaScript
+Python
+Java
+SQL
+React
+Node.js
+Docker
+Kubernetes

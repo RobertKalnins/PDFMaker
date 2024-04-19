@@ -1,0 +1,5 @@
+State University, Master of Science in Computer Science (Graduated: May 2015)
+Specialized in software engineering and machine learning. Completed a thesis on data mining techniques for large datasets.
+
+Tech College, Bachelor of Science in Information Technology (Graduated: May 2013)
+Graduated with Honors, focusing on web development and database management.

@@ -1,0 +1,5 @@
+XYZ Tech, Senior Software Developer (Jan 2019 - Present)
+Led a team of developers in a large-scale project to enhance system security, reducing vulnerabilities by 30%. Implemented new features and optimized existing code, resulting in a 20% increase in application performance.
+
+ABC Corp, Software Engineer (Aug 2015 - Dec 2018)
+Developed numerous applications and services using JavaScript and Python. Improved the deployment process using Docker and Kubernetes, which decreased server downtime by 25%.
