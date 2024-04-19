@@ -19,19 +19,30 @@ function addMultilineText(doc, textArray, bullet = false) {
     doc.moveDown(1); // Extra space after each section
 }
 
-// Create Resume PDF
-const resumeDoc = new PDFDocument({ margin: 50 });
+// Create a new PDF document with customized margins and page size
+const resumeDoc = new PDFDocument({ margin: 50, size: 'A4' });
 resumeDoc.pipe(fs.createWriteStream('resume.pdf'));
 
 // Set a uniform font for the entire document
 resumeDoc.font('Helvetica');
 
-// Add Header
+// Header with name and contact info
 resumeDoc.fontSize(20).text('Your Name', { align: 'center' });
 resumeDoc.fontSize(12).text('Address | Email | Phone', { align: 'center' });
 resumeDoc.moveDown(2);
 
-// Section headers and content
+// Function to add a section header with a colored vector line
+const addSectionHeader = (doc, title) => {
+    doc.fontSize(14).font('Helvetica-Bold').text(title);
+    doc.strokeColor('#800020') // Burgundy color hex code
+       .lineWidth(2)           // Slightly thicker line for visibility
+       .moveTo(50, doc.y + 5)  // Start the line slightly below the text
+       .lineTo(550, doc.y + 5) // End line position
+       .stroke();
+    doc.moveDown(2);          // Add some space after the line
+};
+
+// Sections with headers
 const sections = {
     'Professional Summary': readFileContents('ProfessionalSummary.txt').split('\n'),
     'Experience': readFileContents('Experience.txt').split('\n'),
@@ -39,14 +50,16 @@ const sections = {
     'Skills': readFileContents('Skills.txt').split('\n')
 };
 
+// Apply styles and text for each section
 Object.keys(sections).forEach(section => {
-    resumeDoc.fontSize(14).font('Helvetica-Bold').text(section, { underline: true });
-    resumeDoc.fontSize(10).font('Helvetica');
+    addSectionHeader(resumeDoc, section);
+    resumeDoc.fontSize(10).font('Helvetica').fillColor('black');
     addMultilineText(resumeDoc, sections[section], section === 'Skills' || section === 'Experience');
 });
 
-// Finalize Resume PDF
+// Finalize the PDF and ensure proper closure of the document
 resumeDoc.end();
+
 
 // Create Cover Letter PDF
 const coverDoc = new PDFDocument({ margin: 50 });
