@@ -1,8 +1,9 @@
-JavaScript
-Python
-Java
-SQL
-React
-Node.js
-Docker
-Kubernetes
+Juking on fences
+Zero to Hero 100% sprinters
+Dota1
+Dota2
+CounterStrike
+Project Zomboid
+Zomboid Server Administration
+Linux Server Administration
+Singing songs about fences
